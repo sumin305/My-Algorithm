@@ -1,23 +1,26 @@
 import Foundation
-let ns = readLine()!.split(separator: " ").map{Int(String($0))!}
-let n = ns[0]
-let s = ns[1]
-var arr = readLine()!.split(separator: " ").map{Int(String($0))!}
 
-var end = 0
-var sum = 0
-var count = 0
-var result = Int.max
-for start in 0..<n{
-    while sum < s && end < n{
-        sum += arr[end]
-        end += 1
-        count += 1
+let n = readLine()!.split(separator: " ").map{Int(String($0))!}
+let (N,S) = (n[0], n[1])
+let nums = readLine()!.split(separator: " ").map{Int(String($0))!}
+var (left, right, temp, result) = (0, 0, 0, Int.max)
+
+while true{
+    if temp >= S{
+        result = min(result, right - left)
+        temp -= nums[left]
+        left += 1
     }
-    if sum >= s{
-        result = min(result, count)
+    else if right == N{
+        break
+    }else{
+        temp += nums[right]
+        right += 1
     }
-    sum -= arr[start]
-    count -= 1
 }
-print(result == Int.max ? 0 : result)
+
+if result == Int.max{
+    print(0)
+}else{
+    print(result)
+}
