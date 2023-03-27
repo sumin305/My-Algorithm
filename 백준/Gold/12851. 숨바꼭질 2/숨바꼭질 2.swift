@@ -40,50 +40,42 @@ class Dequeue<T> {
 }
 let input = readLine()!.split(separator: " ").map{Int(String($0))!}
 let (N, K) = (input[0], input[1])
-var board = Array(repeating: 0, count: 100001) // 0부터 100000까지.
 var visited = Array(repeating: false, count: 100001)
 
-func isValidCoord(_ x: Int) -> Bool {
-    return (0 <= x && x <= 100000)
-}
-
-func isEscape(_ x: Int) -> Bool { // 수빈이를 만나면 탈출.
-    return (x == K)
-}
-
-var fastTimeArray: [Int] = []
+var resultArr: [Int] = []
 func bfs(_ startX: Int) {
-    let q = Dequeue([(startX, 0)])
+    let queue = Dequeue([(startX, 0)])
     visited[startX] = true // 첫 시작 true로 초기화.
     
-    while !q.isEmpty {
-        let (x, d) = q.popFirst()
-        visited[x] = true // 숨바꼭질1과 다르게, 큐에서 pop할 때 방문처리해줘야 함.
+    while !queue.isEmpty {
+        let (num, depth) = queue.popFirst()
+        visited[num] = true // 큐에서 pop할 때 방문처리
         
-        if isEscape(x) { // 탈출 가능인데,
-            if fastTimeArray.isEmpty { // 처음이면,
-                fastTimeArray.append(d)
+        if num == K { // 탈출 가능인데,
+            if resultArr.isEmpty { // 처음이면,
+                resultArr.append(depth)
             }
-            else { // 처음이 아닌데,
-                if d == fastTimeArray[0] { // 가장 빠른 시간과 같다면 방법 1개 증가.
-                    fastTimeArray.append(d)
+            else {
+                // 같은 가장 빠른 시간 내에 또 다른 동생을 찾는 방법
+                if depth == resultArr[0] {
+                    resultArr.append(depth)
                 }
             }
         }
         
-        if isValidCoord(x + 1) && board[x + 1] == 0 && visited[x + 1] == false { // (x+1) - 유효 범위고, 방문할 수 있는 곳이고, 방문한 적 없으면,
-            q.pushLast((x+1, d+1))
+        if ((0...100000) ~= num+1) && !visited[num + 1] { // (x+1) - 유효 범위고, 방문할 수 있는 곳이고, 방문한 적 없으면,
+            queue.pushLast((num+1, depth+1))
         }
-        if isValidCoord(x - 1) && board[x - 1] == 0 && visited[x - 1] == false { // (x-1) - 유효 범위고, 방문할 수 있는 곳이고, 방문한 적 없으면,
-            q.pushLast((x-1, d+1))
+        if ((0...100000) ~= num-1) && !visited[num - 1] { // (x-1) - 유효 범위고, 방문할 수 있는 곳이고, 방문한 적 없으면,
+            queue.pushLast((num-1, depth+1))
         }
-        if isValidCoord(2 * x) && board[2 * x] == 0 && visited[2 * x] == false { // (2*x) - 유효 범위고, 방문할 수 있는 곳이고, 방문한 적 없으면,
-            q.pushLast((2*x, d+1))
+        if ((0...100000) ~= num*2) && !visited[num * 2 ] { // (2*x) - 유효 범위고, 방문할 수 있는 곳이고, 방문한 적 없으면,
+            queue.pushLast((2*num, depth+1))
         }
     }
     
 }
 
 bfs(N)
-print(fastTimeArray.first!)
-print(fastTimeArray.count)
+print(resultArr.first!)
+print(resultArr.count)
