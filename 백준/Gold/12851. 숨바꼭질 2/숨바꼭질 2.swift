@@ -41,41 +41,55 @@ class Dequeue<T> {
 let input = readLine()!.split(separator: " ").map{Int(String($0))!}
 let (N, K) = (input[0], input[1])
 var visited = Array(repeating: false, count: 100001)
+var count = 0
+var minDepth = 100001
 
-var resultArr: [Int] = []
-func bfs(_ startX: Int) {
+//방문하지 않았고, 순간이동할 수 있는 위치인지 확인
+func isVisitedPossible(_ x: Int) -> Bool {
+    if ((0...100000) ~= x) && !visited[x] {
+        return true
+    }
+    else{
+        return false
+    }
+}
+func findSister(_ startX: Int) {
+    // 수빈이 위치 queue에 넣고 visited true로 초기화.
     let queue = Dequeue([(startX, 0)])
-    visited[startX] = true // 첫 시작 true로 초기화.
+    visited[startX] = true
     
     while !queue.isEmpty {
         let (num, depth) = queue.popFirst()
-        visited[num] = true // 큐에서 pop할 때 방문처리
+        // 큐에서 pop할 때 방문처리
+        visited[num] = true
         
-        if num == K { // 탈출 가능인데,
-            if resultArr.isEmpty { // 처음이면,
-                resultArr.append(depth)
+        // 동생을 찾은 경우
+        if num == K {
+            // 처음 동생을 찾은 경우
+            if count == 0 {
+                minDepth = depth
+                print(minDepth)
+                count += 1
             }
             else {
                 // 같은 가장 빠른 시간 내에 또 다른 동생을 찾는 방법
-                if depth == resultArr[0] {
-                    resultArr.append(depth)
+                if minDepth == depth {
+                    count += 1
                 }
             }
         }
         
-        if ((0...100000) ~= num+1) && !visited[num + 1] { // (x+1) - 유효 범위고, 방문할 수 있는 곳이고, 방문한 적 없으면,
+        if isVisitedPossible(num+1) {
             queue.pushLast((num+1, depth+1))
         }
-        if ((0...100000) ~= num-1) && !visited[num - 1] { // (x-1) - 유효 범위고, 방문할 수 있는 곳이고, 방문한 적 없으면,
+        if isVisitedPossible(num-1) {
             queue.pushLast((num-1, depth+1))
         }
-        if ((0...100000) ~= num*2) && !visited[num * 2 ] { // (2*x) - 유효 범위고, 방문할 수 있는 곳이고, 방문한 적 없으면,
-            queue.pushLast((2*num, depth+1))
+        if isVisitedPossible(num*2) {
+            queue.pushLast((num*2, depth+1))
         }
     }
-    
 }
 
-bfs(N)
-print(resultArr.first!)
-print(resultArr.count)
+findSister(N)
+print(count)
