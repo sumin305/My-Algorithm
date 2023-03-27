@@ -1,41 +1,41 @@
-class Dequeue<T> {
-    var enQueue: [T]
-    var deQueue: [T] = []
+class Queue<T> {
+    var inbox: [T]
+    var outbox: [T] = []
     
     var count: Int {
-        return enQueue.count + deQueue.count
+        return inbox.count + outbox.count
     }
     
     var isEmpty: Bool {
-        return enQueue.isEmpty && deQueue.isEmpty
+        return inbox.isEmpty && outbox.isEmpty
     }
     
     init(_ queue: [T]) {
-        enQueue = queue
+        inbox = queue
     }
     
     func pushLast(_ element: T) {
-        enQueue.append(element)
+        inbox.append(element)
     }
     
     func pushFirst(_ element: T) {
-        deQueue.append(element)
+        outbox.append(element)
     }
     
     func popLast() -> T {
-        if enQueue.isEmpty {
-            enQueue = deQueue.reversed()
-            deQueue.removeAll()
+        if inbox.isEmpty {
+            inbox = outbox.reversed()
+            outbox.removeAll()
         }
-        return enQueue.popLast()!
+        return inbox.popLast()!
     }
     
     func popFirst() -> T {
-        if deQueue.isEmpty {
-            deQueue = enQueue.reversed()
-            enQueue.removeAll()
+        if outbox.isEmpty {
+            outbox = inbox.reversed()
+            inbox.removeAll()
         }
-        return deQueue.popLast()!
+        return outbox.popLast()!
     }
 }
 let input = readLine()!.split(separator: " ").map{Int(String($0))!}
@@ -55,7 +55,7 @@ func isVisitedPossible(_ x: Int) -> Bool {
 }
 func findSister(_ startX: Int) {
     // 수빈이 위치 queue에 넣고 visited true로 초기화.
-    let queue = Dequeue([(startX, 0)])
+    let queue = Queue([(startX, 0)])
     visited[startX] = true
     
     while !queue.isEmpty {
