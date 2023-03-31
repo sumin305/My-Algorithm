@@ -39,30 +39,34 @@ class Queue<T> {
         return outbox.popLast()!
     }
 }
+
 let S = Int(readLine()!)!
 var queue = Queue([(1, 0, 0)])
 var visited = Array(repeating: Array(repeating: false, count: 2000), count: 2000)
 
 while !queue.isEmpty {
     let (board, clip, time) = queue.popFirst()
-    
     if board == S {
         print(time)
         break
     }
-    if (1..<2000) ~= board {
+    // 복사하기
+    if (1...1000) ~= board {
         if !visited[board][board] {
             visited[board][board] = true
             queue.pushLast((board, board, time+1))
         }
+    }
+    // 삭제하기
+    if (1...1000) ~= board-1 {
         if !visited[board-1][clip] {
             visited[board-1][clip] = true
             queue.pushLast((board-1, clip, time+1))
         }
-      
     }
-        // 한 개 지우기
-    if clip > 0 && board + clip < 2000 {
+    // 붙여넣기
+    // 클립보드가 비어있지 않고, 붙여넣는 값과 화면의 값의 합이 1000을 넘지 않는 경우
+    if clip > 0 && board+clip <= 1000 {
         if !visited[board+clip][clip] {
             visited[board+clip][clip] = true
             queue.pushLast((board+clip, clip, time+1))
