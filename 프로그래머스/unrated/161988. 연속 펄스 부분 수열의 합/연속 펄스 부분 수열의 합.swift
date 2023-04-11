@@ -1,23 +1,19 @@
-
 import Foundation
 
-func solution(_ sequence: [Int]) -> Int64 {
-    let a = sequence.enumerated().map { $0.offset % 2 == 0 ? Int64(-$0.element) : Int64($0.element) }
-    let b = sequence.enumerated().map { $0.offset % 2 == 0 ? Int64($0.element) : Int64(-$0.element) }
-    var dpA: [Int64] = Array(repeating: 0, count: a.count)
-    var dpB: [Int64] = Array(repeating: 0, count: b.count)
-    var resultA: Int64 = a[0]
-    var resultB: Int64 = b[0]
-    dpA[0] = a[0]
-    dpB[0] = b[0]
-
-    for i in 1..<a.count {
-        dpA[i] = max(a[i] + dpA[i - 1], a[i])
-        dpB[i] = max(b[i] + dpB[i - 1], b[i])
-        resultA = max(resultA, dpA[i])
-        resultB = max(resultB, dpB[i])
+func solution(_ sequence:[Int]) -> Int64 {
+    let arr1 = sequence.enumerated().map{ $0.offset % 2 == 0 ? Int64(-$0.element) : Int64($0.element)}
+    let arr2 = sequence.enumerated().map{ $0.offset % 2 != 0 ? Int64(-$0.element) : Int64($0.element)}
+    var dp1: [Int64] = Array(repeating: 0, count: sequence.count)
+    var dp2: [Int64] = Array(repeating: 0, count: sequence.count)
+    var result1: Int64 = arr1[0]
+    var result2: Int64 = arr2[0]
+    dp1[0] = arr1[0]
+    dp2[0] = arr2[0]
+    for i in 1..<sequence.count {
+        dp1[i] = max(dp1[i-1] + arr1[i], arr1[i])
+        dp2[i] = max(dp2[i-1] + arr2[i], arr2[i])
+        result1 = max(result1, dp1[i])
+        result2 = max(result2, dp2[i])
     }
-
-    return max(resultA, resultB)
+    return max(result1, result2)
 }
-
