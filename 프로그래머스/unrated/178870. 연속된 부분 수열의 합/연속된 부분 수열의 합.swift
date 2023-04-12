@@ -12,19 +12,15 @@ func solution(_ sequence:[Int], _ k:Int) -> [Int] {
             }
             end += 1
             sum += sequence[end]
-        }
-        else if sum > k {
+        } else if sum > k {
             sum -= sequence[start]
-            if start < end {
-                start += 1
-            }
-        }
-        else {
+            start += 1
+        } else {
             if end - start + 1 < min {
                 min = end - start + 1
                 result = [start, end]
             }
-             if end == sequence.count - 1 {
+            if end == sequence.count - 1 {
                 break
             }
             end += 1
