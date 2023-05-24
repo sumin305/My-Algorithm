@@ -43,6 +43,5 @@ func solution(_ n:Int, _ wire:[[Int]]) -> Int {
         resultArr.append(abs(countArr[0]-countArr[1]))
     }
     
-    print(graph)
     return resultArr.min()!
 }
