@@ -17,9 +17,5 @@ func solution(_ tickets:[[String]]) -> [String] {
         }
     }
     DFS("ICN", ["ICN"], tickets)
-    if result.isEmpty {
-        return []
-    } else {
-        return result.sorted{String($0.flatMap{$0}) < String($1.flatMap{$0})}[0]
-    }
+    return result.sorted{String($0.flatMap{$0}) < String($1.flatMap{$0})}[0]
 }
