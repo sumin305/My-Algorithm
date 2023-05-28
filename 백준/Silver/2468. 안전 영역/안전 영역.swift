@@ -3,10 +3,11 @@ import Foundation
 let N = Int(readLine()!)!
 
 var arr: [[Int]] = Array(repeating: [], count:  N)
-var safeArea: [[[Int]]] = []
 var visited: [[Bool]] = Array(repeating: Array(repeating: false, count: N), count: N)
 var minHeight: Int = 101
 var maxHeight: Int = 0
+
+// 주어진 영역중 가장 낮은 높이와 높은 높이 검색
 for i in 0..<N {
     arr[i] = readLine()!.split(separator: " ").map{Int(String($0))!}
     if let m = arr[i].max() {
@@ -26,6 +27,7 @@ var maxCount = 1
 let dx = [-1, 1, 0, 0]
 let dy = [0, 0, -1, 1]
 
+// 다음 이동할 공간의 영역안의 공간인지 확인
 func canGo(_ i: Int, _ j: Int) -> Bool {
     if 0..<N ~= i && 0..<N ~= j {
         return true
@@ -33,7 +35,8 @@ func canGo(_ i: Int, _ j: Int) -> Bool {
         return false
     }
 }
-func DFS(_ i: Int, _ j: Int, _ tempArr: inout [[Int]], _ height: Int) {
+
+func DFS(_ i: Int, _ j: Int, _ height: Int) {
     for k in 0..<4 {
         let nx = i + dx[k]
         let ny = j + dy[k]
@@ -43,26 +46,26 @@ func DFS(_ i: Int, _ j: Int, _ tempArr: inout [[Int]], _ height: Int) {
         }
         
         visited[nx][ny] = true
-        tempArr.append([nx, ny])
-        DFS(nx, ny, &tempArr, height)
+        DFS(nx, ny, height)
     }
 }
 
+// 가장 높은 높이부터 가장 높은 높이까지 돌며 안전한 영역 개수 count
 for k in minHeight...maxHeight {
-    safeArea = []
+    var count = 0
     visited = Array(repeating: Array(repeating: false, count: N), count: N)
     for i in 0..<N {
         for j in 0..<N {
             if arr[i][j] > k && !visited[i][j] {
-                var tempArr: [[Int]] = [[i,j]]
                 visited[i][j] = true
-                DFS(i,j,&tempArr,k)
-                safeArea.append(tempArr)
+                DFS(i,j,k)
+                count += 1
             }
         }
+        if maxCount < count {
+            maxCount = count
+        }
     }
-    if maxCount < safeArea.count {
-        maxCount = safeArea.count
-    }
+    
 }
 print(maxCount)
