@@ -1,11 +1,10 @@
 import Foundation
-// 1. 서비스 가입자 최대로 늘리기 2. 판매액 늘리기 
-// 할인율 10, 20, 30, 40
+
 func solution(_ users:[[Int]], _ emoticons:[Int]) -> [Int] {
     let discountRate = [10, 20, 30, 40]
     var candidateRates: [[Int]] = []
     var result: [Int] = [0, 0]
-    // 할인율 4P4로 경우의 수 계산
+    
     func makeCases(_ arr: [Int]) {
         if arr.count == emoticons.count {
             candidateRates.append(arr)
@@ -19,7 +18,7 @@ func solution(_ users:[[Int]], _ emoticons:[Int]) -> [Int] {
     }
     
     makeCases([])
-    // 각 할인율마다 result 계산 -> 할인율 users[0] 넘는 것들 계산해서 더하기
+    
     for candidateRate in candidateRates {
         var plusServiceUsers = 0
         var totalSales = 0
