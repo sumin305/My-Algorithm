@@ -1,34 +1,36 @@
 import sys
+input = sys.stdin.readline 
 
-T = int(sys.stdin.readline())
+T = int(input())
+
+def make_path(num):
+    path = [num]
+    while tree[num]:
+        path.append(tree[num])
+        num = tree[num]
+    return path
 
 for _ in range(T):
-    N=int(sys.stdin.readline())
-    p_list=[0 for _ in range(N+1)]      #각 노드의 부모노드 저장
-    for _ in range(N-1):
-        p,c=map(int,sys.stdin.readline().split())
-        p_list[c]=p                     #부모 노드 저장
- 
-    a,b=map(int,sys.stdin.readline().split())
+    N = int(input())
+    tree = [0 for i in range(N+1)]
+
+    for r in range(N-1):
+
+        a, b = map(int, input().split())
+        tree[b] = a
+
+    target1, target2 = map(int, input().split())
+    path1, path2 = make_path(target1), make_path(target2)
+
+    i, j = 0, 0
+
+    if len(path1) > len(path2):
+        i += (len(path1) - len(path2))
+    else:
+        j += (len(path2) - len(path1))
     
-    a_parent=[a]
-    b_parent=[b]
-                                        #각노드의 부모노드가 루트일때까지 모두 저장
-    while p_list[a]:
-        a_parent.append(p_list[a])
-        a=p_list[a]
- 
-    while p_list[b]:
-        b_parent.append(p_list[b])
-        b=p_list[b]
- 
-                                        #같은 레벨로 맞추고 부모노드 같은거 찾기
- 
-    a_level=len(a_parent)-1
-    b_level=len(b_parent)-1
-                                        # 루트노드부터 차례대로 비교
-    while a_parent[a_level]==b_parent[b_level]:   #부모노드가 같지 않을때까지
-        a_level-=1
-        b_level-=1
- 
-    print(a_parent[a_level+1])
+    while path1[i] != path2[j]:
+        i += 1
+        j += 1
+
+    print(path1[i])
