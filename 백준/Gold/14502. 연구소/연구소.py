@@ -7,7 +7,6 @@ input = sys.stdin.readline
 N, M = map(int, input().split())
 arr = []
 empty = set()
-global max_safe_area
 max_safe_area = 0
 
 # 배열 초기화 및 벽 세울 수 있는 후보 셋 구하기
@@ -49,6 +48,7 @@ def virus(arr):
     return count
 
 
+# 벽 세울 수 있는 곳에 벽 세우기
 def build_wall(empty):
     global max_safe_area
     wall_candidates = itertools.combinations(empty, 3)
@@ -57,7 +57,7 @@ def build_wall(empty):
             arr[wall[0]][wall[1]] = 1
         max_safe_area = max(max_safe_area,virus(arr))
         for wall in candidates:
-            arr[wall[0]][wall[1]] = 0
+            arr[wall[0]][wall[1]] = 0 # 벽 세우고 안전 범위 계산 후 원상복귀
 
 build_wall(empty)
 print(max_safe_area)
