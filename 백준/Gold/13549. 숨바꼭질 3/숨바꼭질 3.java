@@ -13,8 +13,7 @@ public class Main {
 	private static int BFS(int n, int k) {
 		Queue<int[]> q = new ArrayDeque();
 		q.add(new int[] {n, 0});
-		int[] visited = new int[100001];
-		Arrays.fill(visited, Integer.MAX_VALUE);
+		boolean[] visited = new boolean[100001];
 		
 		while (!q.isEmpty()) {
 			int[] target = q.poll();
@@ -25,9 +24,9 @@ public class Main {
 				return sec;
 			}
 			
-			if (visited[num] > sec) {
-				visited[num] = sec;
-                if (0 <= num * 2 && num * 2 <= 100000) q.add(new int[] {num * 2, sec});
+			if (!visited[num]) {
+				visited[num] = true;
+				if (0 <= num * 2 && num * 2 <= 100000) q.add(new int[] {num * 2, sec});
 				if (0 <= num - 1 && num - 1 <= 100000) q.add(new int[] {num - 1, sec + 1});
 				if (0 <= num + 1 && num + 1 <= 100000) q.add(new int[] {num + 1, sec + 1});
 			}
