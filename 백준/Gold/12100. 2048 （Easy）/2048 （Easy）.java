@@ -30,103 +30,49 @@ public class Main {
 	public static int[][] move(int[][] map, int moveIdx) {
 		int[][] newMap = new int[N][N];
 		for (int i = 0; i < N; i++) newMap[i] = map[i].clone();
+		int start = 0, end = 0, step = 0;
 		switch (moveIdx) {
-		 // 오
-		case 0:
-			for (int i = 0; i < N; i++) {
-				ArrayDeque<Integer> q = new ArrayDeque();
-				int temp = 0;
-				for (int j = N - 1; j >= 0; j--) {
-					if (newMap[i][j] == 0) continue;
-					if (temp == newMap[i][j]) {
-						q.removeLast();
-						q.add(temp * 2);
-						temp = 0;
-					} else {
-						q.add(newMap[i][j]);
-						temp  = newMap[i][j];
-					}
-				}
-				
-				for (int j = N - 1; j >= 0; j--) {
-					if (q.isEmpty()) newMap[i][j] = 0;
-					else newMap[i][j] = q.poll();
-				}
-			}
-			break;
-			
-		// 왼
-		case 1:
-			for (int i = 0; i < N; i++) {
-				ArrayDeque<Integer> q = new ArrayDeque();
-				int temp = 0;
-				for (int j = 0; j < N; j++) {
-					if (newMap[i][j] == 0) continue;
-					if (temp == newMap[i][j]) {
-						q.removeLast();
-						q.add(temp * 2);
-						temp = 0;
-					} else {
-						q.add(newMap[i][j]);
-						temp  = newMap[i][j];
-					}
-				}
-
-				for (int j = 0; j < N; j++) {
-					if (q.isEmpty()) newMap[i][j] = 0;
-					else newMap[i][j] = q.poll();
-				}
-			}
-			break;
-			
-		// 위
-		case 2:
-			for (int j = 0; j < N; j++) {
-				ArrayDeque<Integer> q = new ArrayDeque();
-				int temp = 0;
-				for (int i = 0; i < N; i++) {
-					if (newMap[i][j] == 0) continue;
-					if (temp == newMap[i][j]) {
-						q.removeLast();
-						q.add(temp * 2);
-						temp = 0;
-					} else {
-						q.add(newMap[i][j]);
-						temp  = newMap[i][j];
-					}
-				}
-
-				for (int i = 0; i < N; i++) {
-					if (q.isEmpty()) newMap[i][j] = 0;
-					else newMap[i][j] = q.poll();
-				}
-			}
-			break;
-		// 아래
-		default:
-			for (int j = 0; j < N; j++) {
-				ArrayDeque<Integer> q = new ArrayDeque();
-				int temp = 0;
-				for (int i = N - 1; i >= 0; i--) {
-					if (newMap[i][j] == 0) continue;
-					if (temp == newMap[i][j]) {
-						q.removeLast();
-						q.add(temp * 2);
-						temp = 0;
-					} else {
-						q.add(newMap[i][j]);
-						temp  = newMap[i][j];
-					}
-				}
-				
-				for (int i = N - 1; i >= 0; i--) {
-					if (q.isEmpty()) newMap[i][j] = 0;
-					else newMap[i][j] = q.poll();
-				}
-			}
-
+		case 0: case 3: 
+			start = N - 1;
+			end = -1;
+			step = -1;
+			break;	
+		case 1: case 2:
+			start = 0;
+			end = N;
+			step = 1;
 			break;
 		}
+
+		for (int n = 0; n < N; n++) {
+			ArrayDeque<Integer> q = new ArrayDeque();
+			int temp = 0;
+			for (int m = start; m != end; m += step) {
+				int num = 0;
+				if (moveIdx == 0 || moveIdx == 1) num = newMap[n][m];
+				else num = newMap[m][n];
+				if (num == 0) continue;
+				if (temp == num) {
+					q.removeLast();
+					q.add(temp * 2);
+					temp = 0;
+				} else {
+					q.add(num);
+					temp  = num;
+				}
+			}
+
+			for (int m = 0; m < N; m++) {
+				if (moveIdx == 0 || moveIdx == 1) {
+					if (q.isEmpty()) newMap[n][m] = 0;
+					else newMap[n][m] = q.poll();
+				} else {
+					if (q.isEmpty()) newMap[m][n] = 0;
+					else newMap[m][n] = q.poll();
+				}
+			}
+		}
+
 		return newMap;
 	}
 	
