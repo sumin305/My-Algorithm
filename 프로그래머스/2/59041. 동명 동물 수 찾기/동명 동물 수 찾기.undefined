@@ -1,0 +1,6 @@
+SELECT NAME, COUNT(NAME) AS count
+FROM animal_ins
+WHERE NAME IS NOT NULL -- 이름이 없는 동물 제외
+GROUP BY NAME          -- 이름별로 그룹화
+HAVING COUNT(NAME) >= 2 -- 두 번 이상 등장한 이름만 필터링
+ORDER BY NAME ASC;     -- 이름순 정렬
