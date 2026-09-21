@@ -24,35 +24,35 @@ class Solution {
                             .mapToInt(Integer::parseInt).toArray();
             
             int[] calcDay = calc(day, termsMap.get(arr[1]));
+            
+            System.out.println(Arrays.toString(calcDay));
+            System.out.println(Arrays.toString(t));
 
-            if (compareToToday(t, calcDay)) {
-                System.out.println(compareToToday(t, calcDay) + " " + idx);
+            if (!compareToToday(t, calcDay)) {
                 answer.add(idx);
             }
-                        
+            
+            System.out.println(idx + " " + compareToToday(t, calcDay));
+            
             idx++;
         }
-        System.out.println("answer: " + answer);
+        
         return answer.stream().mapToInt(Integer::intValue).toArray();
     }
     
-    // day 날짜 m 더하려는 달
     public int[] calc(int[] day, int m) {
-        System.out.println("함수1검증: " + " " + Arrays.toString(day) + " " + m);
-        
         int[] calcDay = day;
         
+        
         // 유효기간이 그 해를 넘어갈때
-        // 월 계산
         if(day[1] + m > 12) {
             if ((day[1] + m) % 12 == 0) {
                 calcDay[0] = calcDay[0] + (day[1] + m) / 12 - 1;
-                calcDay[1] = 12;
             } else {
-                int sumYear = (day[1] + m) / 12;
-                calcDay[0] = calcDay[0] + sumYear;
-                calcDay[1] = (day[1] + m) - 12 * sumYear ;
+                calcDay[0] = calcDay[0] + (day[1] + m) / 12;
+                calcDay[1] = calcDay[1] + (day[1] + m) % 12;
             }
+            
         } else {
             calcDay[1] = calcDay[1] + m;
         }
@@ -70,19 +70,16 @@ class Solution {
             calcDay[2]--;
         }
             
-        System.out.println(Arrays.toString(calcDay));
         return calcDay;
     }
     
-    // today 오늘날짜 day 유효기간 만료 날짜 
-    // 유효기간 지나면 true 아니면 false 반환
+    // 유효기간 지났으면 false 지나지 않았으면 true (day >= today)
     public boolean compareToToday(int[] today, int[] day) {
-        System.out.println(Arrays.toString(today) + " " + Arrays.toString(day));
-        if (today[0] > day[0]) return true;
-        if (today[0] < day[0]) return false;
-        if (today[1] > day[1]) return true;
-        if (today[1] < day[1]) return false;
-        if (today[2] > day[2]) return true;
-        return false;
+        if (today[0] > day[0]) return false;
+        if (today[0] < day[0]) return true;
+        if (today[1] > today[1]) return false;
+        if (today[1] < today[1]) return true;
+        if (today[2] > day[2]) return false;
+        return true;
     }
 }
