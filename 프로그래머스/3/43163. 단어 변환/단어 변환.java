@@ -1,45 +1,39 @@
 import java.util.*;
-
 class Solution {
     public int solution(String begin, String target, String[] words) {
         int answer = 0;
+        int length = words.length;
+        Queue<Node> q = new ArrayDeque();
+        boolean[] visited = new boolean[length];
         
-        Queue<Node> queue = new ArrayDeque();
-        queue.add(new Node(begin, 0));
+        q.add(new Node(begin, 0));
         
-        while (!queue.isEmpty()) {
+        while (!q.isEmpty()) {
+            Node n = q.poll();
+            if (n.word.equals(target)) return n.count;
             
-            Node targetNode = queue.poll();
-            System.out.println(targetNode.word + " " + targetNode.count);
-                        
-            // target과 동일한 단어일 경우 return
-            if (targetNode.word.equals(target)) {
-                return targetNode.count;
-            }
-            
-            // words에 바꿀 수 있는 단어 있나 확인
-            for (String word: words) {
-                if (canChange(word, targetNode.word)) {
-                    queue.add(new Node(word, targetNode.count + 1));
+            for (int i = 0; i < length; i++) {
+                String next = words[i];
+                if (isOneDifferent(n.word, next, next.length()) && !visited[i]) {
+                    visited[i] = true;
+                    q.add(new Node(next, n.count + 1));
                 }
             }
-
-            if (targetNode.count > words.length) break;
+            
         }
         return answer;
     }
     
-    // 한글자만 다른지 확인
-    public boolean canChange(String word1, String word2) {
+    public boolean isOneDifferent(String a, String b, int length) {
         int cnt = 0;
-        for (int i = 0; i < word1.length(); i++) {
-            if (word1.charAt(i) != word2.charAt(i)) cnt++;
+        boolean result = false;
+        for (int i = 0; i < length; i++) {
+            if (a.charAt(i) != b.charAt(i)) cnt++;
         }
-        return cnt == 1;
+        result = cnt == 1 ? true : false;
+        return result;
     }
 }
-
-
 
 class Node {
     String word;
